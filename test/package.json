@@ -1,0 +1,36 @@
+{
+	"name": "sg-messaging-server",
+	"private": true,
+	"version": "1.0.0",
+	"description": "Sagacify's messaging library, server side.",
+	"main": "./src/sgs-messaging-server",
+	"scripts": {
+		"test": "NODE_ENV=development grunt test"
+	},
+	"dependencies": {
+		"kue": "~0.8.9"
+	},
+	"devDependencies": {
+		"mocha": "^1.21.4",
+		"grunt-cli": "^0.1.13",
+		"load-grunt-tasks": "^0.6.0",
+		"grunt-contrib-jshint": "^0.10.0",
+		"grunt-contrib-clean": "^0.6.0",
+		"grunt-mocha-test": "^0.11.0",
+		"grunt-istanbul": "^0.2.4",
+		"grunt-jsonlint": "^1.0.4",
+		"grunt-jscs": "^0.6.1"
+	},
+	"peerDependencies": {
+		"grunt": "^0.4.5"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Sagacify/sg-messaging-server"
+	},
+	"author": "Mickael van der Beek (https://github.com/Mickael-van-der-Beek)",
+	"bugs": {
+		"url": "https://github.com/Sagacify/sg-messaging-server/issues"
+	},
+	"homepage": "https://github.com/Sagacify/sg-messaging-server"
+}

@@ -1,6 +1,0 @@
-{
-	"private": true,
-	"dependencies": {
-		"sg-messaging-server": "git+ssh://git@github.com:Sagacify/sg-messaging-server.git"
-	}
-}
