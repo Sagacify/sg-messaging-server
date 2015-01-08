@@ -1,9 +1,11 @@
-var kue = require('kue');
+var bull = require('bull');
 
 module.exports = (function () {
 	'use strict';
 
-	function SGSMessagingServer () {}
+	function SGSMessagingServer () {
+		this.queues = null;
+	}
 
 	SGSMessagingServer.prototype.init = function (config) {
 		config = config || {};
@@ -18,57 +20,15 @@ module.exports = (function () {
 			this.host = config.host;
 		}
 
-		this.q = kue.createQueue({
-			prefix: 'q',
-			redis: {
-				port: this.port,
-				host: this.host,
-				auth: config.password,
-				options: config.options
-			}
-		});
-
-		this.priorities = ['low', 'normal', 'medium', 'high', 'critical'];
+		this.queues = {};
 	};
 
-	SGSMessagingServer.prototype.publish = function (jobName, jobInput, options, callback) {
-		if(arguments.length === 3) {
-			callback = options;
-			options = {};
-		} else if (arguments.length === 2) {
-			options = {};
+	SGSMessagingServer.prototype.publish = function (jobName, jobInput) {
+		if (!(jobName in this.queues)) {
+			this.queues[jobName] = bull(jobName, this.port, this.host);
 		}
 
-		var priority = 'normal';
-		if(~this.priorities.indexOf(options.priority)) {
-			priority = options.priority;
-		}
-
-		var attempts = 1;
-		if(typeof options.attempts === 'number' && options.attempts > 1) {
-			attempts = options.attempts;
-		}
-
-		var job = this.q.create(jobName, jobInput)
-		.priority(priority)
-		.attempts(attempts);
-
-		if(typeof options.delay === 'number' && options.delay > 5) {
-			job.delay(options.delay);
-		}
-
-		if (callback) {
-			job
-			.on('complete', callback.bind(null, null))
-			.on('failed', callback.bind(null, true));
-		}
-
-		if(typeof options.progressCallback === 'function') {
-			job
-			.on('progress', options.progressCallback);
-		}
-
-		job.save();
+		this.queues[jobName].add(jobInput);
 	};
 
 	return new SGSMessagingServer();
