@@ -28,9 +28,7 @@ module.exports = (function () {
 			this.queues[jobName] = bull(jobName, this.port, this.host);
 		}
 
-		this.queues[jobName].add(jobInput);
-
-		return this.queues[jobName];
+		return this.queues[jobName].add(jobInput);
 	};
 
 	return new SGSMessagingServer();
