@@ -29,6 +29,8 @@ module.exports = (function () {
 		}
 
 		this.queues[jobName].add(jobInput);
+
+		return this.queues[jobName];
 	};
 
 	return new SGSMessagingServer();
